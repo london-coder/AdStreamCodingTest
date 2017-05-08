@@ -31,7 +31,7 @@ object Exercise {
 		
 		values reduce( _+_ ) // the 'real' value if we had real data!
 		*/
-		BigDecimal(20)	// as we dont have genuine data, but we needd to pass the unit test
+		BigDecimal(20)	// as we dont have genuine data, but we need the unit test to pass
 	}
 
 }
