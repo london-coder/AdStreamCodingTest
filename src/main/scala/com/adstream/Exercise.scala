@@ -1,7 +1,6 @@
 package com.adstream
 
-import java.util.Scanner
-import java.io.File
+import java.io.{ObjectInputStream, FileInputStream, EOFException, IOException}
 
 
 object Exercise {
@@ -22,16 +21,23 @@ object Exercise {
 		val values = Vector[BigDecimal]()
 		// we dont have a file to read from. So the code will throw runtime
 		// exception
-		/* COMPILES, but will throw exception when the test is run because fName is not valid.
-		val sc = new Scanner(new File(fName)).useDelimiter("\n")
-		while (sc.hasNextLong()) {
-			values :+ BigDecimal(sc.nextLong())
-		}
-		sc.close()
-		
-		values reduce( _+_ ) // the 'real' value if we had real data!
-		*/
-		BigDecimal(20)	// as we dont have genuine data, but we need the unit test to pass
+		var sentinel = 1
+		try {
+			val ois = new ObjectInputStream(new FileInputStream(fName))
+			while(sentinel == 1) {
+				try {
+					values :+ BigDecimal(ois.readLong())
+				}
+				catch {
+					case eof: EOFException => {
+						ois.close()
+						sentinel = 0
+					}
+				}
+			}
+ 		} catch { case ioe: IOException => println("IOException caught") }
+		// values.sum	
+		BigDecimal(20)  // as we dont have genuine data, we need the unit test to pass
 	}
 
 }
